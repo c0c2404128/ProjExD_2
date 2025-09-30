@@ -12,6 +12,19 @@ DELTA = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0),
 }
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+# kk_dict = {   #課題３
+#     ( 0,  0): pg.transform.rotozoom(kk_img, 90, -1.0), #キー押下がない場合
+#     (+5,  0): pg.transform.rotozoom(90), #右
+#     (+5, -5): pg.transform.rotozoom(45), #右上
+#     ( 0, -5): pg.transform.rotozoom(0), #上
+#     (-5, -5): pg.transform.rotozoom(315), #左上
+#     (-5,  0): pg.transform.rotozoom(270), #左
+#     (-5, +5): pg.transform.rotozoom(225), #左下
+#     ( 0, +5): pg.transform.rotozoom(180), #下
+#     (+5, +5): pg.transform.rotozoom(135), #右下
+# }
 
 def gameover(screen: pg.Surface) -> None: #課題１
     haikei_img = pg.Surface((WIDTH, HEIGHT))
@@ -25,7 +38,7 @@ def gameover(screen: pg.Surface) -> None: #課題１
     txt = fonto.render("Game over",
             True, (255, 255, 255))
     haikei_img.set_alpha(200)
-    pg.draw.rect(haikei_img, (0, 0, 0), (0, 0, 1600, 900))
+    pg.draw.rect(haikei_img, (0, 0, 0), (0, 0, WIDTH, HEIGHT))
     screen.blit(haikei_img, [0,0])
     screen.blit(txt, [400,300])
     screen.blit(kk2_img, kk2_rct)
@@ -33,19 +46,6 @@ def gameover(screen: pg.Surface) -> None: #課題１
     pg.display.update()
     time.sleep(5)
     return
-
-# kk_dict = {   #課題３
-#     ( 0  0): rotozoom(90), #キー押下がない場合
-#     (+5  0): rotozoom(90), #右
-#     (+5 -5): rotozoom(45), #右上
-#     ( 0 -5): rotozoom(0), #上
-#     (-5 -5): rotozoom(315), #左上
-#     (-5  0): rotozoom(270), #左
-#     (-5 +5): rotozoom(225), #左下
-#     ( 0 +5): rotozoom(180), #下
-#     (+5 +5): rotozoom(135), #右下
-# }
-os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
@@ -79,6 +79,7 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
+    # kaiten_img = kk_dict #課題３
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -87,7 +88,7 @@ def main():
 
         if kk_rct.colliderect(bb_rct):
             
-            return gameover(screen)#ゲームオーバー
+            return gameover(screen)#ゲームオーバー　課題１
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -95,7 +96,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0] #横方向の移動量を加算
                 sum_mv[1] += mv[1] #縦方向の移動量を加算
-        # for key, kakudo in kk_dict.items(): #課題３
+        
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
         # if key_lst[pg.K_DOWN]:
