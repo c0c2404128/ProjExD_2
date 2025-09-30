@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -11,6 +12,39 @@ DELTA = {
     pg.K_LEFT: (-5, 0),
     pg.K_RIGHT: (+5, 0),
 }
+
+def gameover(screen: pg.Surface) -> None: #課題１
+    haikei_img = pg.Surface((WIDTH, HEIGHT))
+    fonto = pg.font.Font(None, 80)
+    kouka_img = pg.image.load("fig/8.png") 
+    kk2_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 0.9)
+    kk2_rct = kouka_img.get_rect()
+    kk3_rct = kouka_img.get_rect()
+    kk2_rct.center = 750, 320
+    kk3_rct.center = 350, 320
+    txt = fonto.render("Game over",
+            True, (255, 255, 255))
+    haikei_img.set_alpha(200)
+    pg.draw.rect(haikei_img, (0, 0, 0), (0, 0, 1600, 900))
+    screen.blit(haikei_img, [0,0])
+    screen.blit(txt, [400,300])
+    screen.blit(kk2_img, kk2_rct)
+    screen.blit(kk2_img, kk3_rct)
+    pg.display.update()
+    time.sleep(5)
+    return
+
+# kk_dict = {   #課題３
+#     ( 0  0): rotozoom(90), #キー押下がない場合
+#     (+5  0): rotozoom(90), #右
+#     (+5 -5): rotozoom(45), #右上
+#     ( 0 -5): rotozoom(0), #上
+#     (-5 -5): rotozoom(315), #左上
+#     (-5  0): rotozoom(270), #左
+#     (-5 +5): rotozoom(225), #左下
+#     ( 0 +5): rotozoom(180), #下
+#     (+5 +5): rotozoom(135), #右下
+# }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -52,7 +86,8 @@ def main():
         screen.blit(bg_img, [0, 0]) 
 
         if kk_rct.colliderect(bb_rct):
-            return #ゲームオーバー
+            
+            return gameover(screen)#ゲームオーバー
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -60,6 +95,7 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0] #横方向の移動量を加算
                 sum_mv[1] += mv[1] #縦方向の移動量を加算
+        # for key, kakudo in kk_dict.items(): #課題３
         # if key_lst[pg.K_UP]:
         #     sum_mv[1] -= 5
         # if key_lst[pg.K_DOWN]:
